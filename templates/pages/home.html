@@ -3,4 +3,50 @@
 {% block content %}
 
 <h1>Welcome to Tweetme</h1>
+
+<div id="tweets">
+    Loading...
+</div>
+
+<script>
+    const tweetsEl = document.querySelector('#tweets');
+
+    function LikeBtn(tweet){
+        return `<button class="btn btn-primary" onclick="handleDidLike(${tweet.id}, ${tweet.likes})">
+                ${tweet.likes}LIKES
+                </button>`
+    }
+
+    function handleDidLike(tweet_id, currentCount){
+        console.log(currentCount)
+    }
+
+    function formatTweetElement(tweet){
+        return `<div class="tweet mb-4" id="${tweet.id}">
+                <p>${tweet.id} - ${tweet.content}</p>
+                <div class="btn-group">${LikeBtn(tweet)}</div>
+            </div>`;
+    }
+
+    const xhr = new XMLHttpRequest();
+    const method = 'GET';
+    const url = "/tweets";
+    const responseType = "json";
+
+    xhr.responseType = responseType;
+    xhr.open(method, url);
+    xhr.onload = function() {
+        let res = xhr.response;
+        let listedItems = res.response;
+        console.log(listedItems);
+
+        let tweetList = '';
+        listedItems.forEach(tweet => {
+            tweetList += formatTweetElement(tweet);
+        }); 
+        tweetsEl.innerHTML = tweetList;
+    }
+    xhr.send();
+
+</script>
 {% endblock content %}
