@@ -2,18 +2,26 @@
 
 {% block content %}
 
-<h1>Welcome to Tweetme</h1>
 
-<div id="tweets">
-    Loading...
+<div class="row">
+    <div class="col">
+        <h2 class="center">Welcome to Tweetme</h2>
+    </div>
+</div>
+<div id="tweets" class=" row">
+    <div class="d-flex justify-content-center">
+        <div class="spinner-grow" role="status">
+            <span class="visually-hidden">Loading...</span>
+        </div>
+    </div>
 </div>
 
 <script>
     const tweetsEl = document.querySelector('#tweets');
 
     function LikeBtn(tweet){
-        return `<button class="btn btn-primary" onclick="handleDidLike(${tweet.id}, ${tweet.likes})">
-                ${tweet.likes}LIKES
+        return `<button class="btn" onclick="handleDidLike(${tweet.id}, ${tweet.likes})">
+                ${tweet.likes} LIKES
                 </button>`
     }
 
@@ -22,7 +30,7 @@
     }
 
     function formatTweetElement(tweet){
-        return `<div class="tweet mb-4" id="${tweet.id}">
+        return `<div class="tweet bg-light col-12 border rounded py-3 mb-4" id="${tweet.id}">
                 <p>${tweet.id} - ${tweet.content}</p>
                 <div class="btn-group">${LikeBtn(tweet)}</div>
             </div>`;
