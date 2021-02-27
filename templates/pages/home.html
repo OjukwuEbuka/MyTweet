@@ -71,7 +71,7 @@
                 const newTweet = xhr.response;
                 const newTweetEl = formatTweetElement(newTweet)
                 tweetsDiv.innerHTML = newTweetEl + tweetsDiv.innerHTML;
-                myForm.querySelector('button .spinner-grow').classList.add('d-none');
+                myForm.querySelector('button .spinner-border').classList.add('d-none');
                 myForm.reset();
             } else if (xhr.status === 400){
                 const errorJson = xhr.response;
@@ -88,7 +88,13 @@
                     alert("An error occured, please try again!")
                 }
 
-            } else if (xhr.status === 500){
+            } else if (xhr.status === 401){
+                    alert("You must login!")
+                    window.location.href = '/login';
+            } else if (xhr.status === 403){
+                    alert("You must login!")
+                    window.location.href = '/login';
+            }  else if (xhr.status === 500){
                 const jsonError = xhr.response;
                 alert("A server error occured, please try again!")
             } 
@@ -109,7 +115,7 @@
         xhr.open(method, url);
         xhr.onload = function() {
             let res = xhr.response;
-            let listedItems = res.response;
+            let listedItems = res;
             console.log(listedItems);
 
             let tweetList = '';

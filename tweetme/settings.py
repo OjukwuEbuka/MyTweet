@@ -26,6 +26,8 @@ SECRET_KEY = '9ur(#yg@d3qv@!3506ilgd27v_nxmtpulfai5=@i0s4aq4*$h1'
 DEBUG = True
 
 ALLOWED_HOSTS = ['127.0.0.1']
+LOGIN_URL = "/login"
+MAX_TWEET_LENGTH = 240
 
 
 # Application definition
@@ -40,6 +42,9 @@ INSTALLED_APPS = [
 
     #My Apps
     'tweets',
+
+    #Third party
+    'rest_framework'
 ]
 
 MIDDLEWARE = [
@@ -125,3 +130,20 @@ STATICFILES_DIRS = [
     BASE_DIR / "static"
 ]
 STATIC_ROOT = "static_root"
+
+DEFAULT_RENDERER_CLASSES = [
+        'rest_framework.renderers.JSONRenderer',
+    ]
+
+
+if DEBUG:
+    DEFAULT_RENDERER_CLASSES += [
+        'rest_framework.renderers.BrowsableAPIRenderer',
+    ]
+
+REST_FRAMEWORK = {
+    'DEFAULT_AUTHENTICATION_CLASSES': [
+        'rest_framework.authentication.SessionAuthentication'
+    ],
+    'DEFAULT_RENDERER_CLASSES': DEFAULT_RENDERER_CLASSES
+}
