@@ -6,10 +6,17 @@ from django.db import models
 
 User = settings.AUTH_USER_MODEL
 
+class TweetLike(models.Model):
+    user = models.ForeignKey(User, null=True, on_delete=models.SET_NULL)
+    tweet = models.ForeignKey("Tweet", null=True, on_delete=models.SET_NULL)
+    timestamp = models.DateTimeField(auto_now_add=True)
+
 class Tweet(models.Model):
     user = models.ForeignKey(User, null=True, on_delete=models.SET_NULL) # many users can have many tweets
+    likes = models.ManyToManyField(User, related_name='tweet_user', blank=True,through=TweetLike)
     content = models.TextField(blank=True, null=True)
     image = models.FileField(upload_to='images/', blank=True, null=True)
+    timestamp = models.DateTimeField(auto_now_add=True)
 
     class Meta:
         ordering = ['-id']
