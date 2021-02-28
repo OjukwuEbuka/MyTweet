@@ -11,7 +11,7 @@
 
 <div class="row mb-4">
     <div class="col-md-4 mx-auto col-10">
-        <form action="/tweet/create" method="POST" class="form" id="tweetCreateForm">
+        <form action="/api/tweets/create" method="POST" class="form" id="tweetCreateForm">
             {% csrf_token %}
             <div class="d-none alert alert-danger" id="tweetCreateFormError"></div>
             <input type="hidden" value="/" name="next" />
@@ -67,9 +67,10 @@
         xhr.setRequestHeader("X-CSRFToken", csrftoken);
         xhr.onload = function(){
             if(xhr.status === 200){
-                let tweet = JSON.parse(xhr.response)
-                let btn = tweetsDiv.querySelector(`#likeBtn${tweet.id}`);
-                btn.querySelector('.likeCount').innerHTML = tweet.likes;
+                // let tweet = JSON.parse(xhr.response)
+                // let btn = tweetsDiv.querySelector(`#likeBtn${tweet.id}`);
+                // btn.querySelector('.likeCount').innerHTML = tweet.likes;
+                loadTweets(tweetsDiv)
             }
         }
         xhr.send(data);
@@ -134,7 +135,7 @@
     function loadTweets(tweetsEl){    
         const xhr = new XMLHttpRequest();
         const method = 'GET';
-        const url = "/tweets";
+        const url = "/api/tweets";
         const responseType = "json";
 
         xhr.responseType = responseType;
