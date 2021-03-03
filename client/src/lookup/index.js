@@ -1,4 +1,4 @@
-import {loadTweets} from './component';
+import {loadTweets, createTweet} from './component';
 
 
-export {loadTweets};
+export {loadTweets, createTweet};

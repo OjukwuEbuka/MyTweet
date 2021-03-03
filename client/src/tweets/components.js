@@ -1,23 +1,71 @@
 import React, { useState, useEffect } from 'react';
-import {loadTweets} from '../lookup'
+import {createTweet, loadTweets} from '../lookup';
 
-export function TweetsList(){
-  const [tweets, setTweets] = useState([]);
+export function TweetsComponent(props){
+  const [newTweets, setNewTweets] = useState([]);
 
-  useEffect(() => {
-    const myCallBack = (stat, res) => {
-      if(stat === 200){
-        setTweets(res);        
+  const textAreaRef = React.createRef();
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    const newVal = textAreaRef.current.value;
+    let tempNewTweets = [...newTweets];
+
+    createTweet(newVal, (res, stat) => {
+      if(stat === 201){
+        //
+        tempNewTweets.unshift(res)
       } else {
-
+        alert("An error occurred!")
       }
-    }
-    loadTweets(myCallBack);
-  }, [])
+    })
+    setNewTweets(tempNewTweets);
+    textAreaRef.current.value = '';
+  }
 
   return (
-    tweets.map(tweet => (
-      <Tweet key={tweet.id} tweet={tweet} className="my-5 py-5 col-md-6 mx-auto border bg-white text-center" />
+    <div className={props.className}>
+      <div className='col-12 mb-3 text-center'>
+        <form onSubmit={handleSubmit}>
+          <textarea ref={textAreaRef} className="form-control" name="tweet" required={true}></textarea>
+
+          <button type='submit' className='btn btn-primary my-3'>Tweet</button>
+        </form>
+      </div>
+      <TweetsList newTweets={newTweets} />
+    </div>
+  )
+}
+
+export function TweetsList(props){
+  const [tweetsInit, setTweetsInit] = useState(props.newTweets ? props.newTweets : []);
+  const [tweets, setTweets] = useState([]);
+  const [tweetsDidSet, setTweetsDidSet] = useState(false);
+
+  useEffect(() => {
+    let final = [...props.newTweets, ...tweetsInit];
+    if(final.length !== tweets.length){
+      setTweets(final);
+    }
+  }, [tweetsInit, props.newTweets, tweets])
+
+  useEffect(() => {
+    if(tweetsDidSet === false){
+      const myCallBack = (stat, res) => {
+        if(stat === 200){
+          setTweetsDidSet(true)
+          setTweetsInit(res);        
+        } else {
+  
+        }
+      }
+      loadTweets(myCallBack);
+    }
+  }, [tweetsDidSet, setTweetsDidSet])
+
+  return (
+    tweets.map((tweet, i) => (
+      <Tweet key={i} tweet={tweet} className="my-5 py-5 col-md-6 mx-auto border bg-white text-center" />
     ))
   )
 }

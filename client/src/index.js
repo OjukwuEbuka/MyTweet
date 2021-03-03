@@ -2,10 +2,19 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 // import 'semantic-ui-css/semantic.min.css';
 import App from './App';
+import { TweetsComponent } from './tweets';
 
-ReactDOM.render(<App />,
-  document.getElementById('root')
-);
+  
+const rootEl = document.getElementById('root');
+if(rootEl){
+  ReactDOM.render(<App />, rootEl);
+}
+
+const tweetsEl = document.querySelector('#tweetme');
+
+if(tweetsEl){
+  ReactDOM.render(<TweetsComponent />, tweetsEl)
+}
 
 // If you want to start measuring performance in your app, pass a function
 // to log results (for example: reportWebVitals(console.log))

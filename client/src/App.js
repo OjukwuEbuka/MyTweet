@@ -1,20 +1,25 @@
 import React from 'react';
+import { Provider } from 'react-redux';
+import { Switch, BrowserRouter, Route } from 'react-router-dom';
 
 
 import Navbar from './components/Navbar';
-import {TweetsList} from './tweets';
+import { store } from './store';
+import {TweetsComponent} from './tweets';
 
 function App(){
   
   return (
-    <>
+    <Provider store={store}>
       <Navbar />
-        <div className="container">
-          {
-            <TweetsList />
-          }
-        </div>
-    </>
+      <BrowserRouter>
+        <Switch>
+            <div className="container">
+              <Route to='/' component={TweetsComponent} />
+            </div>
+        </Switch>
+      </BrowserRouter>
+    </Provider>
   )
 }
 
