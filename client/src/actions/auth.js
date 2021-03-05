@@ -7,7 +7,8 @@ import {
 
 export const login = loginData => dispatch => {
 
-    lookup('POST', '/api/accounts/login', (res) => {
+    console.log('login function')
+    lookup('POST', '/auth/login', (res) => {
         if(res.status === 200){
             dispatch({
                 type: LOGIN_SUCCESS,
@@ -19,5 +20,7 @@ export const login = loginData => dispatch => {
                 payload: res.data
             })
         }
-    }, loginData)
+    }, loginData, {
+        "Content-Type": "application/json"
+    })
 }

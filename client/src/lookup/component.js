@@ -1,4 +1,4 @@
-export function lookup(method, endpoint, callback, data){
+export function lookup(method, endpoint, callback, data, extraHeaders={}){
   let jsonData;
   // const csrftoken = getCookie('csrftoken');
   if(data){
@@ -9,6 +9,11 @@ export function lookup(method, endpoint, callback, data){
   const url = `http://127.0.0.1:8001/api${endpoint}`;
   xhr.responseType = "json";
   xhr.open(method, url);
+  if(extraHeaders){
+    for(const [k, val] of Object.entries(extraHeaders)){
+      xhr.setRequestHeader(k, val);
+    }
+  }
   // xhr.setRequestHeader("HTTP_X_REQUESTED_WITH", "XMLHttpRequest");
   // xhr.setRequestHeader("X-Requested-With", "XMLHttpRequest");
   // if(csrftoken){

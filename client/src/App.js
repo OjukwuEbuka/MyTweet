@@ -2,7 +2,7 @@ import React from 'react';
 import { Provider } from 'react-redux';
 import { Switch, BrowserRouter, Route } from 'react-router-dom';
 
-
+import Login from './components/Login';
 import Navbar from './components/Navbar';
 import { store } from './store';
 import {TweetsComponent} from './tweets';
@@ -13,11 +13,12 @@ function App(){
     <Provider store={store}>
       <Navbar />
       <BrowserRouter>
-        <Switch>
-            <div className="container">
-              <Route to='/' component={TweetsComponent} />
-            </div>
-        </Switch>
+        <div className="container">
+          <Switch>
+              <Route exact path='/' component={TweetsComponent} />
+              <Route exact path='/login' component={Login} />
+          </Switch>
+        </div>
       </BrowserRouter>
     </Provider>
   )
