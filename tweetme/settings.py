@@ -148,6 +148,7 @@ DEFAULT_RENDERER_CLASSES = [
     ]
 DEFAULT_AUTHENTICATION_CLASSES = [
         'rest_framework.authentication.SessionAuthentication',
+        'knox.auth.TokenAuthentication'
     ]
 
 if DEBUG:

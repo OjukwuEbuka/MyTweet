@@ -2,7 +2,7 @@ import {lookup} from '../lookup';
 import { 
     LOGIN_SUCCESS,
     LOGIN_FAIL,
-    AUTH_ERROR
+    // AUTH_ERROR
 } from "./types";
 
 export const login = loginData => dispatch => {
