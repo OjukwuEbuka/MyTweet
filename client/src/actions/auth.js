@@ -2,25 +2,65 @@ import {lookup} from '../lookup';
 import { 
     LOGIN_SUCCESS,
     LOGIN_FAIL,
-    // AUTH_ERROR
+    USER_LOADED,
+    AUTH_ERROR,
+    LOGOUT_SUCCESS
 } from "./types";
 
 export const login = loginData => dispatch => {
 
-    console.log('login function')
-    lookup('POST', '/auth/login', (res) => {
-        if(res.status === 200){
+    lookup('POST', '/auth/login', (stat, data) => {
+        if(stat === 200){
             dispatch({
                 type: LOGIN_SUCCESS,
-                payload: res.data
+                payload: data
             })
         } else {
             dispatch({
                 type: LOGIN_FAIL,
-                payload: res.data
+                payload: data
             })
         }
     }, loginData, {
         "Content-Type": "application/json"
     })
+}
+
+export const loadUser = () => (dispatch, getState) => {
+    const token = getState().authReducer.token
+    lookup('POST', '/auth/user', (stat, data) => {
+        if(stat === 200){
+            dispatch({
+                type: USER_LOADED,
+                payload: data
+            })
+        } else {
+            dispatch({
+                type: AUTH_ERROR,
+                payload: data
+            })
+        }
+    }, {}, {
+        "Content-Type": "application/json",
+        "Authorization": `Token ${token}`
+    } )
+}
+
+export const logout = () => (dispatch, getState) => {
+    const token = getState().authReducer.token
+    lookup('POST', '/auth/logout', (stat, data) => {
+        if(stat === 204){
+            dispatch({
+                type: LOGOUT_SUCCESS
+            })
+        } else {
+            dispatch({
+                type: AUTH_ERROR,
+                payload: data
+            })
+        }
+    }, {}, {
+        "Content-Type": "application/json",
+        "Authorization": `Token ${token}`
+    } )
 }

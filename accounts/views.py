@@ -19,3 +19,10 @@ def login_view(request, *args, **kwargs):
     }
     print(res)
     return Response(res)
+
+@api_view(['POST', 'GET'])
+@permission_classes([IsAuthenticated])
+def user_view(request, *args, **kwargs):
+    serializer = UserSerializer(request.user).data
+    # serializer.is_valid(raise_exception=True)
+    return Response(serializer)
