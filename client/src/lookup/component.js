@@ -30,7 +30,11 @@ export function lookup(method, endpoint, callback, data, extraHeaders={}){
 }
 
 export function createTweet(newTweet, callBack){
-  lookup('POST', '/tweets/create', callBack, newTweet);
+  const token = localStorage.getItem('token');
+  lookup('POST', '/tweets/create', callBack, {content: newTweet}, {
+    'Authorization': `Token ${token}`,
+    'Content-Type': 'application/json'
+  });
 }
 
 export function loadTweets(callBack){

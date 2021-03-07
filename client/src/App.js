@@ -16,8 +16,8 @@ function App(){
   
   return (
     <Provider store={store}>
-      <Navbar />
       <BrowserRouter>
+        <Navbar />
         <div className="container">
           <Switch>
               <Route exact path='/' component={TweetsComponent} />

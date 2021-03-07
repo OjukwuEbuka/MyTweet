@@ -1,5 +1,6 @@
 import React from 'react';
 import { connect } from 'react-redux';
+import {Link} from 'react-router-dom';
 
 import { logout } from '../actions/auth';
 
@@ -45,7 +46,7 @@ function Navbar(props) {
         </form>
         */}
         {
-          isAuthenticated && (
+          isAuthenticated ? (
             <ul className="navbar-nav mr-4 mb-2 mb-lg-0">
               <li className="nav-item dropdown">
                 <a className="nav-link dropdown-toggle" role="button" id="navbarDropdown" data-bs-toggle="dropdown" aria-expanded="false">
@@ -57,6 +58,12 @@ function Navbar(props) {
                   <li><hr className="dropdown-divider" /></li>
                   <li><a className="dropdown-item" href="/">Something else here</a></li>
                 </ul>
+              </li>
+            </ul>
+          ) : (
+            <ul className="navbar-nav mr-4 mb-2 mb-lg-0">
+              <li className="nav-item">
+                <Link className="nav-link" to="/login" tabindex="-1" aria-disabled="true">Login</Link>
               </li>
             </ul>
           )

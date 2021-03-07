@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, Redirect } from 'react-router-dom';
 import { connect } from 'react-redux';
 
 import {login} from '../../actions/auth';
@@ -7,7 +7,7 @@ import {login} from '../../actions/auth';
 
 function Login(props){
     const [values, setValues] = useState({username:'', password:''});
-    const {login} = props;
+    const {login, auth} = props;
 
     function onChange(e){
         setValues({...values, [e.target.name]: e.target.value})
@@ -21,6 +21,10 @@ function Login(props){
         } else {
             alert('Values must not be empty')
         }
+    }
+
+    if(auth.isAuthenticated){
+        return <Redirect to="/" />
     }
 
     return (
@@ -54,9 +58,9 @@ function Login(props){
     )
 }
 
-// const mapStateToProps = state => {
-//     return {auth: state.authReducer}
-// }
+const mapStateToProps = state => {
+    return {auth: state.authReducer}
+}
 
-export default connect(null, {login})(Login);
+export default connect(mapStateToProps, {login})(Login);
 // export default Login;

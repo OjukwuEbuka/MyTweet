@@ -11,15 +11,16 @@ export function TweetsComponent(props){
     const newVal = textAreaRef.current.value;
     let tempNewTweets = [...newTweets];
 
-    createTweet(newVal, (res, stat) => {
+    createTweet(newVal, (stat, res) => {
       if(stat === 201){
-        //
-        tempNewTweets.unshift(res)
+        console.log(res)
+        // tempNewTweets = [res, ...tempNewTweets];
+        setNewTweets([res, ...tempNewTweets]);
       } else {
         alert("An error occurred!")
       }
     })
-    setNewTweets(tempNewTweets);
+    console.log(newTweets)
     textAreaRef.current.value = '';
   }
 
