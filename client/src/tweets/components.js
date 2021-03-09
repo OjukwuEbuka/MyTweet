@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import {createTweet, loadTweets} from '../lookup';
+import {apiTweetAction, apiTweetCreate, apiTweetList} from './lookup';
 
 export function TweetsComponent(props){
   const [newTweets, setNewTweets] = useState([]);
@@ -11,7 +11,7 @@ export function TweetsComponent(props){
     const newVal = textAreaRef.current.value;
     let tempNewTweets = [...newTweets];
 
-    createTweet(newVal, (stat, res) => {
+    apiTweetCreate(newVal, (stat, res) => {
       if(stat === 201){
         console.log(res)
         // tempNewTweets = [res, ...tempNewTweets];
@@ -60,7 +60,7 @@ export function TweetsList(props){
   
         }
       }
-      loadTweets(myCallBack);
+      apiTweetList(myCallBack);
     }
   }, [tweetsDidSet, setTweetsDidSet])
 
@@ -71,48 +71,74 @@ export function TweetsList(props){
   )
 }
 
+export function ParentTweet(props){
+  const {tweet} = props;
+
+  return (
+    tweet.parent ?
+      <div className="row">
+        <div className='col-11 mx-auto p-3 border rounded '>
+          <p className='mb-0 text-muted small'>Retweet</p>
+          <Tweet className='' tweet={tweet.parent} />
+        </div>
+      </div>
+      :
+      null
+  )
+}
+
 export function Tweet(props){
-    const {tweet} = props
+    const {tweet} = props;
+    const [actionTweet, setActionTweet] = useState(props.tweet ? props.tweet : null);
     const className = props.className ? props.className : "col-10 mx-auto col-md-6";
+
+    const handlePerformAction = (newActionTweet, stat) => {
+      if(stat === 200){
+        setActionTweet(newActionTweet)
+      }else if(stat === 201){
+        //pass to tweetList
+      }
+    }
     
     return (
+
       <div className={className}>
-        <p>{tweet.id} - {tweet.content}</p>
-        <ActionBtn tweet={tweet} action={{type: "like", display: "Likes"}} />
-        <ActionBtn tweet={tweet} action={{type: "unlike", display: "Unlike"}} />
-        <ActionBtn tweet={tweet} action={{type: "retweet", display: "Retweet"}} />
+        <div>
+          <p>{tweet.id} - {tweet.content}</p>
+            <ParentTweet tweet={tweet} />
+        </div>
+        {actionTweet && <div className="btn btn-group">
+          <ActionBtn tweet={actionTweet} didPerformAction={handlePerformAction} action={{type: "like", display: "Likes"}} />
+          <ActionBtn tweet={actionTweet} didPerformAction={handlePerformAction} action={{type: "unlike", display: "Unlike"}} />
+          <ActionBtn tweet={actionTweet} didPerformAction={handlePerformAction} action={{type: "retweet", display: "Retweet"}} />
+        </div>}
       </div>
     )
   }
   
 export function ActionBtn(props){
-    const {tweet, action} = props;
-    const [likes, setLikes] = useState(tweet.likes ? tweet.likes : 0)
-    const [userLike, setUserLike] = useState(tweet.userLike === true ? true : false)
+    const {tweet, action, didPerformAction} = props;
+    const likes = tweet.likes ? tweet.likes : 0;
     
     const className = props.className ? props.className : "btn btn-primary";
     const actionDisplay = action.display ? action.display : 'Action';
     const display = action.type === 'like' ? `${likes} ${actionDisplay}` : actionDisplay;
 
-    const handleClick = (e) => {
-        e.preventDefault()
-        if(action.type === 'like'){
-            if(userLike ){
-                setUserLike(false)
-                setLikes(likes - 1)
-            } else {
-                setUserLike(true)
-                setLikes(likes + 1)
-            }
+    const handleActionbackendEvent = (stat, res) => {
+      console.log(res, stat)
+        if((stat === 200 || stat === 201) && didPerformAction){
+          didPerformAction(res, stat)
         }
     }
+    const handleClick = (e) => {
+        e.preventDefault()
+        apiTweetAction({id: tweet.id, action: action.type, content:tweet.content}, handleActionbackendEvent)
+    }
+
     return (
-      action.type === 'like' ?
       <button className={className} id="" onClick={handleClick}>
         {display}
       </button>
-      :
-      null
     )
   }
 
@@ -134,7 +160,7 @@ function handleTweetActionBtn(tweet_id, currentCount, action){
     // xhr.setRequestHeader("X-CSRFToken", csrftoken);
     xhr.onload = function(){
         if(xhr.status === 200){
-            // loadTweets(()=>{})
+            // apiTweetList(()=>{})
         }
     }
     xhr.send(data);

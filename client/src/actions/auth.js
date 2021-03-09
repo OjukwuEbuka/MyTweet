@@ -27,7 +27,8 @@ export const login = loginData => dispatch => {
 }
 
 export const loadUser = () => (dispatch, getState) => {
-    const token = getState().authReducer.token
+    // const token = getState().authReducer.token
+    const token = localStorage.getItem("token");
     lookup('POST', '/auth/user', (stat, data) => {
         if(stat === 200){
             dispatch({

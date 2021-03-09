@@ -29,18 +29,6 @@ export function lookup(method, endpoint, callback, data, extraHeaders={}){
   xhr.send(jsonData);
 }
 
-export function createTweet(newTweet, callBack){
-  const token = localStorage.getItem('token');
-  lookup('POST', '/tweets/create', callBack, {content: newTweet}, {
-    'Authorization': `Token ${token}`,
-    'Content-Type': 'application/json'
-  });
-}
-
-export function loadTweets(callBack){
-  lookup('GET', '/tweets/', callBack);
-}
-
 // function getCookie(name){
 //   let cookieValue = null;
 //   if(document.cookie && document.cookie !== ''){
