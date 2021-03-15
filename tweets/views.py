@@ -17,6 +17,7 @@ from .serializers import (
 )
 from .models import Tweet
 from .forms import TweetForm
+from accounts.serializers import UserSerializer
 
 # Create your views here.
 
@@ -95,6 +96,10 @@ def tweet_action_view(request, *args, **kwargs):
 @api_view(['GET'])
 def tweet_list_view(request, *args, **kwargs):
     qs = Tweet.objects.all()
+    username = UserSerializer(request.user).data.get('username')
+    print(username)
+    if username != None:
+        qs = qs.filter(user__username__iexact=username)
     serializer = TweetSerializer(qs, many=True)
     return Response(serializer.data, status=200)
 

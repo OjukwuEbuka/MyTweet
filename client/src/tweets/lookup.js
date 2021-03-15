@@ -10,7 +10,10 @@ export function apiTweetCreate(newTweet, callBack){
   }
 
 export function apiTweetList(callBack){
-    lookup('GET', '/tweets/', callBack);
+    const token = localStorage.getItem('token');
+    lookup('GET', '/tweets/', callBack, {}, {
+      'Authorization': `Token ${token}`
+    });
 }
 
 export function apiTweetAction(data, callBack){

@@ -4,10 +4,12 @@ import ReactDOM from 'react-dom';
 import App from './App';
 import { TweetsComponent } from './tweets';
 
-  
+const e = React.createElement;
 const rootEl = document.getElementById('root');
 if(rootEl){
-  ReactDOM.render(<App />, rootEl);
+  // const MyApp = e(App, rootEl.dataset)
+  // ReactDOM.render(<App />, rootEl);
+  ReactDOM.render(e(App, rootEl.dataset), rootEl);
 }
 
 const tweetsEl = document.querySelector('#tweetme');
